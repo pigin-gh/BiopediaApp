@@ -25,6 +25,7 @@
         android:layout_marginTop="?attr/actionBarSize">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/scanner_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -32,8 +33,8 @@
 
             <com.budiyev.android.codescanner.CodeScannerView
                 android:id="@+id/scanner_view"
-                android:layout_width="265dp"
-                android:layout_height="265dp"
+                android:layout_width="264dp"
+                android:layout_height="264dp"
                 android:layout_centerInParent="true"
                 app:autoFocusButtonVisible="false"
                 app:flashButtonVisible="false"
@@ -41,13 +42,34 @@
                 app:frameAspectRatioWidth="1"
                 app:frameColor="@color/white"
                 app:frameCornersRadius="16dp"
-                app:frameCornersSize="50dp"
-                app:frameSize="0.90"
+                app:frameCornersSize="75dp"
+                app:frameSize="0.9"
                 app:frameThickness="2dp"
                 app:maskVisible="false" />
 
-
         </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/flash_button"
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scanner_card"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/flashlight"
+            app:icon="@drawable/ic_baseline_flash_on_24"
+            app:iconGravity="textStart" />
+
+        <com.google.android.material.textview.MaterialTextView
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/flash_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:text="@string/flashlight_on"
+            android:visibility="invisible"
+            android:id="@+id/flashlight_on_tv"/>
 
 
     </RelativeLayout>
