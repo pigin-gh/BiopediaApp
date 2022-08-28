@@ -4,4 +4,10 @@
     <string name="exit">Выход</string>
     <string name="flashlight">Фонарик</string>
     <string name="flashlight_on">Фонарик включен</string>
+    <string name="error">Ошибка</string>
+    <string name="camera_perm_dialog_supporting_text">Для работы QR-сканера требуется разрешение на использование камеры</string>
+    <string name="decline">Отмена</string>
+    <string name="camera_init_dialog_supporting_text">Ошибка инициализации камеры. Обратитесь в поддержку</string>
+    <string name="grant">Предоставить</string>
+    <string name="contact">Обратиться</string>
 </resources>
