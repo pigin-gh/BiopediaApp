@@ -5,4 +5,5 @@ object Constants {
     const val SUPPORT_ADDRESS = "pavel.pigin@gmail.com"
     const val SUPPORT_EMAIL_SUBJECT = "Ошибка в приложении Биопедия"
     const val SUPPORT_EMAIL_TEXT = "Пожалуйста, напишите тут модель своего устройства и ваши действия при возникновении проблемы: "
+    const val HOME_ACTIVITY_TAG = "home_activity"
 }

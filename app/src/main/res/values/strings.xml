@@ -10,4 +10,6 @@
     <string name="camera_init_dialog_supporting_text">Ошибка инициализации камеры. Обратитесь в поддержку</string>
     <string name="grant">Предоставить</string>
     <string name="contact">Обратиться</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
