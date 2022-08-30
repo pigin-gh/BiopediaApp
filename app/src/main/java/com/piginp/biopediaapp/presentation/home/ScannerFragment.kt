@@ -1,24 +1,18 @@
 package com.piginp.biopediaapp.presentation.home
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.CodeScannerView
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
+import androidx.fragment.app.Fragment
+import com.budiyev.android.codescanner.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.piginp.biopediaapp.R
 import com.piginp.biopediaapp.databinding.FragmentScannerBinding
@@ -34,18 +28,21 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
 
     private lateinit var codeScanner: CodeScanner
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        init()
-    }
+    private var fragmentScannerBinding: FragmentScannerBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+    ): View {
+        val binding = FragmentScannerBinding.inflate(inflater, container, false)
+        fragmentScannerBinding = binding
+
+        // Сюда вставлять действия с binding
+        // ---
+        init()
+        // ---
+        return binding.root
     }
 
     override fun onResume() {
@@ -57,8 +54,9 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        fragmentScannerBinding = null
     }
+
     override fun onPause() {
         super.onPause()
 
@@ -66,17 +64,20 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         // TODO: Потестить потом возврат в приложение, тут не было super
     }
 
-
     private fun init() {
-        scannerView = _binding!!.scannerView
+        scannerView = fragmentScannerBinding!!.scannerView
         codeScanner = CodeScanner(requireContext(), scannerView)
 
         if (requireContext().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), Constants.CAMERA_REQUEST_CODE);
         }
 
-        binding.flashButton.setOnClickListener {
+        fragmentScannerBinding!!.flashButton.setOnClickListener {
             switchFlashlight()
+        }
+
+        fragmentScannerBinding!!.openBiopdaBt.setOnClickListener {
+            openWebPage("https://biopda.ru/")
         }
     }
 
@@ -85,13 +86,21 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         if (!flashLightStatus) {
             codeScanner.isFlashEnabled = true
             flashLightStatus = true
-            binding.flashlightOnTv.isVisible = true
-            binding.flashButton.setBackgroundColor(resources.getColor(R.color.primaryDarkColor)) // TODO
+            fragmentScannerBinding!!.flashButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.primaryDarkColor
+                )
+            )
         } else {
             codeScanner.isFlashEnabled = false
             flashLightStatus = false
-            binding.flashlightOnTv.isVisible = false
-            binding.flashButton.setBackgroundColor(resources.getColor(R.color.primaryColor)) // TODO
+            fragmentScannerBinding!!.flashButton.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.primaryColor
+                )
+            )
         }
     }
 
@@ -116,14 +125,14 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         }
 
         codeScanner.decodeCallback = DecodeCallback {
-            activity?.runOnUiThread {
+            requireActivity().runOnUiThread {
                 openWebPage(it.text)
                 codeScanner.stopPreview()
             }
         }
 
-        codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
-            activity?.runOnUiThread {
+        codeScanner.errorCallback = ErrorCallback {
+            requireActivity().runOnUiThread {
                 showCameraInitErrorDialog()
             }
         }
@@ -176,11 +185,12 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
     //--- Открыть страницу настроек приложения
     private fun openApplicationDetailsSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        val uri = Uri.fromParts("package", requireContext().getPackageName(), null)
+        val uri = Uri.fromParts("package", requireContext().packageName, null)
         intent.data = uri
         startActivity(intent)
     }
 
+    //--- Действия при выборе в окне доступа к камере
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
