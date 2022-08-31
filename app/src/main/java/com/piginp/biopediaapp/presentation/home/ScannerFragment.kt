@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.budiyev.android.codescanner.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -45,6 +44,37 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        fragmentScannerBinding?.toolbar?.inflateMenu(R.menu.home)
+
+        fragmentScannerBinding?.toolbar?.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.support -> {
+                    sendErrorEmail(
+                        addresses = Array(1) { Constants.SUPPORT_ADDRESS },
+                        subject = Constants.SUPPORT_EMAIL_SUBJECT_REQUEST,
+                        text = Constants.SUPPORT_EMAIL_TEXT_REQUEST
+                    )
+                    true
+                }
+                R.id.settings -> {
+                    // Открыть настройки
+                    true
+                }
+                R.id.about_app -> {
+                    openAppInfoFragment()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+//    fun clearToolbarMenu() {
+//        fragmentScannerBinding?.toolbar?.menu?.clear()
+//    }
+
     override fun onResume() {
         super.onResume()
 
@@ -61,7 +91,6 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         super.onPause()
 
         codeScanner.releaseResources()
-        // TODO: Потестить потом возврат в приложение, тут не было super
     }
 
     private fun init() {
@@ -77,8 +106,13 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         }
 
         fragmentScannerBinding!!.openBiopdaBt.setOnClickListener {
-            openWebPage("https://biopda.ru/")
+            openWebPage(Constants.BIOPDA_URL)
         }
+    }
+
+    private fun openAppInfoFragment() {
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.frame_layout, AboutAppFragment())?.commit()
     }
 
     //--- Переключить фонарик
@@ -175,8 +209,8 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
             .setPositiveButton(resources.getString(R.string.contact)) { dialog, which ->
                 sendErrorEmail(
                     addresses = Array(1) { Constants.SUPPORT_ADDRESS },
-                    subject = Constants.SUPPORT_EMAIL_SUBJECT,
-                    text = Constants.SUPPORT_EMAIL_TEXT
+                    subject = Constants.SUPPORT_EMAIL_SUBJECT_ERROR,
+                    text = Constants.SUPPORT_EMAIL_TEXT_ERROR
                 )
             }
             .show()
