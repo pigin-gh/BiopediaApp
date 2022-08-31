@@ -34,7 +34,7 @@
                 android:id="@+id/biopda_icon"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
-                android:src="@drawable/biopda_logo" />
+                android:src="@drawable/biopda_logo_large" />
 
             <TextView
                 android:id="@+id/app_name"
@@ -58,15 +58,58 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/made_by"
-            style="@style/TextAppearance.Material3.BodyLarge"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="8dp"
-            android:text="@string/made_with_love" />
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/made_by"
+                style="@style/TextAppearance.Material3.BodyLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/made_with_love" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/vk_bt"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:shadowColor="@color/vkColor"
+                android:text="@string/vkontakte"
+                android:textColor="@color/vkColor"
+                app:icon="@drawable/vk_logo"
+                app:iconGravity="textStart"
+                app:rippleColor="@color/vkColor"
+                app:strokeColor="@color/vkColor"
+                app:iconTint="@android:color/transparent"
+                app:iconTintMode="add"
+                android:layout_below="@id/made_by"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/github_bt"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/made_by"
+                android:layout_margin="4dp"
+                android:layout_toEndOf="@id/vk_bt"
+                android:shadowColor="@color/ghColor"
+                android:text="@string/github"
+                android:textColor="@color/ghColor"
+                app:icon="@drawable/gh_logo"
+                app:iconGravity="textStart"
+                app:iconTint="@android:color/transparent"
+                app:iconTintMode="add"
+                app:rippleColor="@color/ghColor"
+                app:strokeColor="@color/ghColor" />
+
+
+        </RelativeLayout>
 
     </RelativeLayout>
 

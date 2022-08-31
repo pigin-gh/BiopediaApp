@@ -3,6 +3,7 @@ package com.piginp.biopediaapp.presentation.home
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.piginp.biopediaapp.R
 import com.piginp.biopediaapp.databinding.ActivityHomeBinding
 

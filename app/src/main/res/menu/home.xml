@@ -7,10 +7,10 @@
         android:title="@string/support"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/settings"-->
+<!--        android:title="@string/settings"-->
+<!--        app:showAsAction="never" />-->
 
     <item
         android:id="@+id/about_app"

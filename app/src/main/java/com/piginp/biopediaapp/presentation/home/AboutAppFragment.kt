@@ -1,13 +1,19 @@
 package com.piginp.biopediaapp.presentation.home
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
 import com.piginp.biopediaapp.BuildConfig
 import com.piginp.biopediaapp.R
 import com.piginp.biopediaapp.databinding.FragmentAboutAppBinding
+import com.piginp.biopediaapp.presentation.constants.Constants
 
 class AboutAppFragment : Fragment(R.layout.fragment_about_app) {
 
@@ -27,13 +33,33 @@ class AboutAppFragment : Fragment(R.layout.fragment_about_app) {
 
         fragmentAboutAppBinding.toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         fragmentAboutAppBinding.toolbar.setNavigationOnClickListener {
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.frame_layout, ScannerFragment())
-                ?.commit()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .setTransition(TRANSIT_FRAGMENT_CLOSE)
+                .replace(R.id.frame_layout, ScannerFragment())
+                .commit()
+        }
+
+        fragmentAboutAppBinding.vkBt.setOnClickListener {
+            openWebPage(Constants.DEV_VK_BIO_URL)
+        }
+
+        fragmentAboutAppBinding.githubBt.setOnClickListener {
+            openWebPage(Constants.DEV_GH_BIO_URL)
         }
     }
 
     private fun setVersionName() {
         fragmentAboutAppBinding.versionName.text = BuildConfig.VERSION_NAME
+    }
+
+    //--- Открыть ссылку в окне браузера
+    private fun openWebPage(url: String?) {
+        val webpage: Uri = Uri.parse(url)
+        val intent = Intent(Intent.ACTION_VIEW, webpage)
+        try {
+            startActivity(intent)
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), "Приложение не найдено", Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -13,4 +13,9 @@
     <color name="primaryDarkColor">#88aa8c</color>
     <color name="primaryTextColor">#000000</color>
     <color name="activatedColor">#4CAF50</color>
+
+    <color name="vkColor">#0077FF</color>
+    <color name="ghColor">#333</color>
+
+
 </resources>

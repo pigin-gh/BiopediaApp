@@ -8,5 +8,9 @@ object Constants {
     const val SUPPORT_EMAIL_SUBJECT_REQUEST = "Обращение в техническую поддержку Биопедия"
     const val SUPPORT_EMAIL_TEXT_REQUEST = "Опишите свою проблему или вопрос: "
     const val BIOPDA_URL = "https://biopda.ru/"
+    const val CLOSE_CARD_KEY = "Close card key"
+    const val DEV_VK_BIO_URL = "https://vk.com/pigin_vk"
+    const val DEV_GH_BIO_URL = "https://github.com/pigin-gh"
+
 
 }

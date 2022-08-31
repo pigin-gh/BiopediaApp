@@ -11,11 +11,13 @@
     <string name="grant">Предоставить</string>
     <string name="contact">Обратиться</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="open_biopda">Открыть биопедию</string>
     <string name="scan_qr_code">Отсканируйте QR-код</string>
     <string name="support">Поддержка</string>
     <string name="settings">Настройки</string>
     <string name="about_app">О приложении</string>
     <string name="made_with_love">Made with &#10084; by pigin</string>
+    <string name="help_text_1">Сканируй QR-код этим приложением и находи много нового и интересного о экспонате</string>
+    <string name="vkontakte">ВКонтакте</string>
+    <string name="github">GitHub</string>
 </resources>

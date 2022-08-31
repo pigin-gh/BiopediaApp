@@ -1,16 +1,23 @@
 package com.piginp.biopediaapp.presentation.home
 
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.SharedMemory
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import com.budiyev.android.codescanner.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.piginp.biopediaapp.R
@@ -29,6 +36,10 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
 
     private var fragmentScannerBinding: FragmentScannerBinding? = null
 
+    private var helpCardStatus: Boolean = true
+
+    private lateinit var sharedPref: SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,6 +47,8 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
     ): View {
         val binding = FragmentScannerBinding.inflate(inflater, container, false)
         fragmentScannerBinding = binding
+
+        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
 
         // Сюда вставлять действия с binding
         // ---
@@ -58,10 +71,10 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
                     )
                     true
                 }
-                R.id.settings -> {
-                    // Открыть настройки
-                    true
-                }
+//                R.id.settings -> {
+//                    // Открыть настройки
+//                    true
+//                }
                 R.id.about_app -> {
                     openAppInfoFragment()
                     true
@@ -78,8 +91,8 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
     override fun onResume() {
         super.onResume()
 
-        startScanning()
         checkFlashlightStatus()
+        startScanning()
     }
 
     override fun onDestroyView() {
@@ -94,6 +107,8 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
     }
 
     private fun init() {
+        checkHelpCardStatus()
+
         scannerView = fragmentScannerBinding!!.scannerView
         codeScanner = CodeScanner(requireContext(), scannerView)
 
@@ -108,11 +123,35 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         fragmentScannerBinding!!.openBiopdaBt.setOnClickListener {
             openWebPage(Constants.BIOPDA_URL)
         }
+
+        fragmentScannerBinding!!.closeHelpCard.setOnClickListener {
+            fragmentScannerBinding!!.helpCard.isVisible = false
+            putFalseToCardStatus()
+        }
     }
 
+    private fun putFalseToCardStatus() {
+        with (sharedPref.edit()) {
+            putBoolean(Constants.CLOSE_CARD_KEY, false)
+            apply()
+        }
+    }
+
+    //--- Проверить при запуске статус карточки с помощью,
+    //--- если пользователь уже удалял её, то она не высветится
+    private fun checkHelpCardStatus() {
+        helpCardStatus = sharedPref.getBoolean(Constants.CLOSE_CARD_KEY, true)
+        if (!helpCardStatus) {
+            fragmentScannerBinding!!.helpCard.isVisible = false
+        }
+    }
+
+    //--- Открыть Fragment с информацией о приложении
     private fun openAppInfoFragment() {
-        activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.frame_layout, AboutAppFragment())?.commit()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .addToBackStack(null)
+            .setTransition(TRANSIT_FRAGMENT_OPEN)
+            .replace(R.id.frame_layout, AboutAppFragment()).commit()
     }
 
     //--- Переключить фонарик
@@ -165,11 +204,7 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
             }
         }
 
-        codeScanner.errorCallback = ErrorCallback {
-            requireActivity().runOnUiThread {
-                showCameraInitErrorDialog()
-            }
-        }
+        codeScanner.errorCallback = ErrorCallback.SUPPRESS
 
     }
 
@@ -177,8 +212,10 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
     private fun openWebPage(url: String?) {
         val webpage: Uri = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, webpage)
-        if (packageManager?.let { intent.resolveActivity(it) } != null) {
+        try {
             startActivity(intent)
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), "Приложение не найдено", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -249,8 +286,10 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
             putExtra(Intent.EXTRA_SUBJECT, subject)
             putExtra(Intent.EXTRA_TEXT, text)
         }
-        if (packageManager?.let { intent.resolveActivity(it) } != null) {
+        try {
             startActivity(intent)
+        } catch (ex: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), "Приложение не найдено", Toast.LENGTH_SHORT).show()
         }
     }
 }
