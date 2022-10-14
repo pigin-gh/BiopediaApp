@@ -10,7 +10,6 @@
     <string name="camera_init_dialog_supporting_text">Ошибка инициализации камеры. Обратитесь в поддержку</string>
     <string name="grant">Предоставить</string>
     <string name="contact">Обратиться</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="open_biopda">Открыть биопедию</string>
     <string name="scan_qr_code">Отсканируйте QR-код</string>
     <string name="support">Поддержка</string>
@@ -20,4 +19,17 @@
     <string name="help_text_1">Сканируй QR-код этим приложением и находи много нового и интересного о экспонате</string>
     <string name="vkontakte">ВКонтакте</string>
     <string name="github">GitHub</string>
+    <string name="app_not_found">Приложение не найдено</string>
+
+    <!--    Url -->
+    <string name="biopda_url">https://biopda.ru/</string>
+    <string name="pigin_gh_url">https://github.com/pigin-gh</string>
+    <string name="pigin_vk_url">https://vk.com/pigin_vk</string>
+
+    <!--    Email -->
+    <string name="support_address">biopda.info@gmail.com</string>
+    <string name="support_email_text_error">Пожалуйста, напишите тут модель своего устройства и ваши действия при возникновении проблемы: </string>
+    <string name="support_email_subject_error">Ошибка в приложении Биопедия</string>
+
+
 </resources>

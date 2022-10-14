@@ -8,7 +8,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.SharedMemory
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -29,8 +28,6 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
     private lateinit var scannerView: CodeScannerView
 
     private var flashLightStatus: Boolean = false
-
-    private val Fragment.packageManager get() = activity?.packageManager
 
     private lateinit var codeScanner: CodeScanner
 
@@ -59,34 +56,28 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        fragmentScannerBinding?.toolbar?.inflateMenu(R.menu.home)
 
         fragmentScannerBinding?.toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
+
                 R.id.support -> {
                     sendErrorEmail(
-                        addresses = Array(1) { Constants.SUPPORT_ADDRESS },
-                        subject = Constants.SUPPORT_EMAIL_SUBJECT_REQUEST,
-                        text = Constants.SUPPORT_EMAIL_TEXT_REQUEST
+                        addresses = Array(1) { getString(R.string.support_address) },
+                        subject = getString(R.string.support_email_subject_error),
+                        text = getString(R.string.support_email_text_error)
                     )
                     true
                 }
-//                R.id.settings -> {
-//                    // Открыть настройки
-//                    true
-//                }
+
                 R.id.about_app -> {
                     openAppInfoFragment()
                     true
                 }
                 else -> false
+
             }
         }
     }
-
-//    fun clearToolbarMenu() {
-//        fragmentScannerBinding?.toolbar?.menu?.clear()
-//    }
 
     override fun onResume() {
         super.onResume()
@@ -113,7 +104,7 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         codeScanner = CodeScanner(requireContext(), scannerView)
 
         if (requireContext().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA), Constants.CAMERA_REQUEST_CODE);
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), Constants.CAMERA_REQUEST_CODE)
         }
 
         fragmentScannerBinding!!.flashButton.setOnClickListener {
@@ -121,7 +112,7 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
         }
 
         fragmentScannerBinding!!.openBiopdaBt.setOnClickListener {
-            openWebPage(Constants.BIOPDA_URL)
+            openWebPage(getString(R.string.biopda_url))
         }
 
         fragmentScannerBinding!!.closeHelpCard.setOnClickListener {
@@ -131,7 +122,7 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
     }
 
     private fun putFalseToCardStatus() {
-        with (sharedPref.edit()) {
+        with(sharedPref.edit()) {
             putBoolean(Constants.CLOSE_CARD_KEY, false)
             apply()
         }
@@ -199,7 +190,7 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
 
         codeScanner.decodeCallback = DecodeCallback {
             requireActivity().runOnUiThread {
-                openWebPage(it.text)
+                openWebPage("${getString(R.string.biopda_url)}${it.text}")
                 codeScanner.stopPreview()
             }
         }
@@ -226,29 +217,10 @@ class ScannerFragment : Fragment(R.layout.fragment_scanner) {
             .setMessage(resources.getString(R.string.camera_perm_dialog_supporting_text))
 
             .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
-                activity?.onBackPressed();
+                activity?.onBackPressed()
             }
             .setPositiveButton(resources.getString(R.string.grant)) { dialog, which ->
                 openApplicationDetailsSettings() // Открыть страницу настроек приложения
-            }
-            .show()
-    }
-
-    //--- Показать диалог с сообщением об ошибке инициализации камеры
-    private fun showCameraInitErrorDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(resources.getString(R.string.error))
-            .setMessage(resources.getString(R.string.camera_init_dialog_supporting_text))
-
-            .setNegativeButton(resources.getString(R.string.decline)) { dialog, which ->
-                dialog.cancel()
-            }
-            .setPositiveButton(resources.getString(R.string.contact)) { dialog, which ->
-                sendErrorEmail(
-                    addresses = Array(1) { Constants.SUPPORT_ADDRESS },
-                    subject = Constants.SUPPORT_EMAIL_SUBJECT_ERROR,
-                    text = Constants.SUPPORT_EMAIL_TEXT_ERROR
-                )
             }
             .show()
     }

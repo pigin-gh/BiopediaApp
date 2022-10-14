@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_CLOSE
 import com.piginp.biopediaapp.BuildConfig
 import com.piginp.biopediaapp.R
 import com.piginp.biopediaapp.databinding.FragmentAboutAppBinding
-import com.piginp.biopediaapp.presentation.constants.Constants
 
 class AboutAppFragment : Fragment(R.layout.fragment_about_app) {
 
@@ -40,11 +39,11 @@ class AboutAppFragment : Fragment(R.layout.fragment_about_app) {
         }
 
         fragmentAboutAppBinding.vkBt.setOnClickListener {
-            openWebPage(Constants.DEV_VK_BIO_URL)
+            openWebPage(getString(R.string.pigin_vk_url))
         }
 
         fragmentAboutAppBinding.githubBt.setOnClickListener {
-            openWebPage(Constants.DEV_GH_BIO_URL)
+            openWebPage(getString(R.string.pigin_gh_url))
         }
     }
 
@@ -59,7 +58,8 @@ class AboutAppFragment : Fragment(R.layout.fragment_about_app) {
         try {
             startActivity(intent)
         } catch (ex: ActivityNotFoundException) {
-            Toast.makeText(requireContext(), "Приложение не найдено", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.app_not_found), Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }

@@ -59,6 +59,7 @@
                     android:text="@string/help_text_1"
                     android:textColor="#505050"
                     android:maxWidth="250dp"
+                    android:layout_toStartOf="@id/close_help_card"
                     android:layout_marginVertical="16dp"/>
 
                 <ImageButton
@@ -67,7 +68,7 @@
                     android:layout_height="32dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
+                    android:layout_margin="10dp"
                     android:background="@drawable/rectangle"
                     android:src="@drawable/ic_baseline_close_24" />
 
